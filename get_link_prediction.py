@@ -2,7 +2,6 @@
 This script is used to get the link prediction results of the trained model.
 """
 
-import stellargraph
 import pandas as pd
 import numpy as np
 import tensorflow as tf
@@ -10,7 +9,6 @@ from stellargraph.layer import GraphSAGE, link_classification
 from stellargraph.mapper import GraphSAGELinkGenerator
 from stellargraph import StellarGraph
 from stellargraph.data import EdgeSplitter
-from keras.utils.vis_utils import plot_model
 import networkx as nx
 
 
@@ -48,7 +46,7 @@ def load_graph():
 
     # Randomly sample a fraction p=0.1 of all positive links, and same number of negative links, from G, and obtain the
     # reduced graph G_test with the sampled links removed:
-    G_test, edge_ids_test, edge_labels_test = edge_splitter_test.train_test_split(
+    G_test, _, _ = edge_splitter_test.train_test_split(
     p=0.1, method="global", keep_connected=True)
 
     # Define an edge splitter on the reduced graph G_test:
@@ -56,11 +54,11 @@ def load_graph():
 
     # Randomly sample a fraction p=0.1 of all positive links, and same number of negative links, from G_test, and obtain the
     # reduced graph G_train with the sampled links removed:
-    G_train, edge_ids_train, edge_labels_train = edge_splitter_train.train_test_split(
+    G_train, _, _ = edge_splitter_train.train_test_split(
         p=0.1, method="global", keep_connected=True
     )
 
-    return G_train, G_test
+    return G_train, G_test, G_nx
 
 
 # ==============================================================================
@@ -111,7 +109,7 @@ def load_weights(model):
         model : (keras.Model) The model.
     """
     # Load the weights of the model.
-    model_path = "models/graphsage_model.h5"
+    model_path = "models/weights.h5"
     model.load_weights(model_path)
 
     return model
@@ -120,7 +118,7 @@ def load_weights(model):
 # ==============================================================================
 
 
-def get_link_prediction_results(model, author_id, G_test):
+def get_link_prediction_results(model, author_id, G_test, G_nx):
     """
     Get the link prediction results.
 
@@ -134,7 +132,7 @@ def get_link_prediction_results(model, author_id, G_test):
     #Get edge between author_id and not connected nodes
     edges = []
     for node in G_test.nodes():
-        if node != author_id and not G_test.has_edge(author_id, node):
+        if node != author_id and not G_nx.has_edge(author_id, node):
             edges.append((author_id, node))
 
     # Convert to ndarray
@@ -171,40 +169,4 @@ def get_link_prediction_results(model, author_id, G_test):
     return top_10_predictions
 
 
-# ==============================================================================
-
-
-def main():
-    """
-    Get the top 10 predictions.
-
-    Args:
-        author_id : (str) The author id.
-
-    Returns:
-        top_10_predictions : (list) The top 10 predictions.
-
-
-    """
-    author_id = '617101adfaad3d5fe1840a25'
-    # Load the graph.
-    G_train, G_test = load_graph()
-
-    # Create the model.
-    model = create_model(G_train)
-
-    # Load the weights of the model.
-    model = load_weights(model)
-
-    # Get the link prediction results.
-    top_10_predictions = get_link_prediction_results(model, author_id, G_test)
-
-    return top_10_predictions
-
-
-# ==============================================================================
-
-
-if __name__ == "__main__":
-    top_10_predictions = main()
-    print(top_10_predictions)
+# =================================================================================

@@ -1,0 +1,164 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "616a90648705c5ced1d853c1", "label": "10885", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616a8c538705c5ced1d853c0", "label": "Mahmood A. Mahmood", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616e5c60c7c18e3fffa5c826", "label": "Nicola Paltrinieri", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616e5c69c7c18e3fffa5c827", "label": "Alessandro Tugnoli", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "61668a1e6c32b1f0cce11eb2", "label": "Daniel R\u00fcdiger", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "61668a416c32b1f0cce11eb3", "label": "Stefan Zahler", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "6167f85f111c093e3270ad78", "label": "Matthew Varacallo", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "6167f847111c093e3270ad77", "label": "Maxwell Y Jen", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "615483dce97a629785f89ec1", "label": "Herve Andrieu", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "61548365e97a629785f89ebc", "label": "Manabendra Saharia", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616a8bef8705c5ced1d853be", "label": "Samar Mahmoud", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616a086c0bfbed636ae9f4c9", "label": "Shahram Ebadollahi", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616a084b0bfbed636ae9f4c7", "label": "J. Sun", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616e5c98c7c18e3fffa5c82a", "label": "Valerio Cozzani", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616e5c6fc7c18e3fffa5c828", "label": "Jonathan Buston", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616498758e6e3adce4d2470a", "label": "Yiguang Liu", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616498578e6e3adce4d24709", "label": "Menglong Yang", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "6164987d8e6e3adce4d2470b", "label": "Zhisheng You", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "615483b8e97a629785f89ebf", "label": "Jonathan Gourley", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616e5c77c7c18e3fffa5c829", "label": "Mike Wardman", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616a8c3a8705c5ced1d853bf", "label": "Nashwa El-Bendary", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "61548386e97a629785f89ebd", "label": "Pierre-Emmanuel Kirstetter", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616a08310bfbed636ae9f4c6", "label": "David Gotz", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "614c6f130a236166770e49d7", "label": "Marc Cussatt", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "614c6f240a236166770e49d8", "label": "Bernard Wong-On-Wing", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "61642c3612b641baec7afbea", "label": "Mark Field", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "61642c2612b641baec7afbe7", "label": "S S Poon", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "614ee43869122247088ab9fb", "label": "Joseph George", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "614d61fe0804e12d1c701401", "label": "David S Liebeskind", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "614d62130804e12d1c701402", "label": "Emma Feldmann", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616a08650bfbed636ae9f4c8", "label": "Nan Cao", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "61668a176c32b1f0cce11eb1", "label": "Maibritt Kretschmer", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "614ee31269122247088ab9e8", "label": "Pankaj Kumar", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "6154839ae97a629785f89ebe", "label": "Humberto J. Vergara", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "615483c0e97a629785f89ec0", "label": "isabelle emmanuel", "shape": "dot", "title": "2"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "614c6f0d0a236166770e49d6", "label": "Li Huang", "shape": "dot", "title": "2"}]);
+                  edges = new vis.DataSet([{"from": "616a90648705c5ced1d853c1", "to": "616a8c538705c5ced1d853c0"}, {"from": "616a90648705c5ced1d853c1", "to": "616a8bef8705c5ced1d853be"}, {"from": "616a90648705c5ced1d853c1", "to": "616a8c3a8705c5ced1d853bf"}, {"from": "616a90648705c5ced1d853c1", "to": "616e5c60c7c18e3fffa5c826"}, {"from": "616e5c60c7c18e3fffa5c826", "to": "616e5c69c7c18e3fffa5c827"}, {"from": "616e5c60c7c18e3fffa5c826", "to": "616e5c98c7c18e3fffa5c82a"}, {"from": "616e5c60c7c18e3fffa5c826", "to": "616e5c6fc7c18e3fffa5c828"}, {"from": "616e5c60c7c18e3fffa5c826", "to": "616e5c77c7c18e3fffa5c829"}, {"from": "616e5c60c7c18e3fffa5c826", "to": "616a086c0bfbed636ae9f4c9"}, {"from": "616e5c60c7c18e3fffa5c826", "to": "614d62130804e12d1c701402"}, {"from": "616e5c60c7c18e3fffa5c826", "to": "616498578e6e3adce4d24709"}, {"from": "616e5c60c7c18e3fffa5c826", "to": "6164987d8e6e3adce4d2470b"}, {"from": "616e5c60c7c18e3fffa5c826", "to": "615483dce97a629785f89ec1"}, {"from": "616e5c60c7c18e3fffa5c826", "to": "614c6f130a236166770e49d7"}, {"from": "616e5c60c7c18e3fffa5c826", "to": "61668a1e6c32b1f0cce11eb2"}, {"from": "616e5c60c7c18e3fffa5c826", "to": "6167f847111c093e3270ad77"}, {"from": "616e5c60c7c18e3fffa5c826", "to": "61642c3612b641baec7afbea"}, {"from": "61668a1e6c32b1f0cce11eb2", "to": "61668a416c32b1f0cce11eb3"}, {"from": "61668a1e6c32b1f0cce11eb2", "to": "61668a176c32b1f0cce11eb1"}, {"from": "6167f85f111c093e3270ad78", "to": "6167f847111c093e3270ad77"}, {"from": "615483dce97a629785f89ec1", "to": "61548365e97a629785f89ebc"}, {"from": "615483dce97a629785f89ec1", "to": "615483b8e97a629785f89ebf"}, {"from": "615483dce97a629785f89ec1", "to": "61548386e97a629785f89ebd"}, {"from": "615483dce97a629785f89ec1", "to": "6154839ae97a629785f89ebe"}, {"from": "615483dce97a629785f89ec1", "to": "615483c0e97a629785f89ec0"}, {"from": "616a086c0bfbed636ae9f4c9", "to": "616a084b0bfbed636ae9f4c7"}, {"from": "616a086c0bfbed636ae9f4c9", "to": "616a08310bfbed636ae9f4c6"}, {"from": "616a086c0bfbed636ae9f4c9", "to": "616a08650bfbed636ae9f4c8"}, {"from": "616498758e6e3adce4d2470a", "to": "616498578e6e3adce4d24709"}, {"from": "616498758e6e3adce4d2470a", "to": "6164987d8e6e3adce4d2470b"}, {"from": "616498578e6e3adce4d24709", "to": "6164987d8e6e3adce4d2470b"}, {"from": "614c6f130a236166770e49d7", "to": "614c6f240a236166770e49d8"}, {"from": "614c6f130a236166770e49d7", "to": "614c6f0d0a236166770e49d6"}, {"from": "61642c3612b641baec7afbea", "to": "61642c2612b641baec7afbe7"}, {"from": "61642c3612b641baec7afbea", "to": "614ee43869122247088ab9fb"}, {"from": "61642c3612b641baec7afbea", "to": "614ee31269122247088ab9e8"}, {"from": "614d61fe0804e12d1c701401", "to": "614d62130804e12d1c701402"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.8,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
