@@ -1,0 +1,164 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "616ee2e2230b68e4d0b516ef", "label": "Po-Hsien Chang", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ee2ef230b68e4d0b516f0", "label": "Li.-C Wang", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "614fe80c96fccec11411b5ac", "label": "Elias Azarov", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "614fe80596fccec11411b5ab", "label": "Sergei Nikiforov", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ed35848b6a07ed5acca05", "label": "Ali Adibi", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ed2c848b6a07ed5acc9fe", "label": "Yashar Kiarashi", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ce4978b2fa90321ea27bc", "label": "Yevhenii Vovk", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ce49c8b2fa90321ea27bd", "label": "Olena P. Tokmenko", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616c8f4b46c4225dba57323a", "label": "Saung Hnin Pwint Oo", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616c8f6646c4225dba57323b", "label": "Nguyen Duy Hung", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616c8f8046c4225dba57323c", "label": "Thanaruk Theeramunkong", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616decda8943984ab3008d61", "label": "Mayukh Bagchi", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616dece68943984ab3008d62", "label": "Simone Bocca", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616d090bbc0da65919e10917", "label": "S. K. M. Wong", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616d0903bc0da65919e10916", "label": "Yiyu Yao", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616dff20efce095c7b2f6973", "label": "Ahmed Lbath", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616dff0defce095c7b2f6972", "label": "Lamia Karim", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ce46d8b2fa90321ea27b9", "label": "Sergii Telenyk", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616decbc8943984ab3008d5f", "label": "Fausto Giunchiglia", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616decc88943984ab3008d60", "label": "Alessio Zamboni", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616dc0f4f0242c09a427906c", "label": "Heng Kuang", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616dc116f0242c09a427906d", "label": "Olga Ormandjieva", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ed17348b6a07ed5acc9e5", "label": "Soeren Bergmann", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ed18f48b6a07ed5acc9e6", "label": "Steffen Stra\u00dfburger", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ce4928b2fa90321ea27bb", "label": "Eduard Zharikov", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ed32248b6a07ed5acca04", "label": "Reid Barton", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "614fe7ff96fccec11411b5aa", "label": "Daniil Shunkevich", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ed15748b6a07ed5acc9e4", "label": "Niclas Feldkamp", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ed2ec48b6a07ed5acca00", "label": "Muliang Zhu", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ed2f248b6a07ed5acca01", "label": "Hossein Maleki", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616578f03fcba441cd8d3d89", "label": "Arnau Valladares-Esteban", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616578ea3fcba441cd8d3d88", "label": "Joern Onken", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "614fe7ec96fccec11411b5a9", "label": "Vadim Zahariev", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616dc0ebf0242c09a427906b", "label": "Jinzi Huang", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ed2db48b6a07ed5acc9ff", "label": "Mohammadreza Zandehshahvar", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ed31048b6a07ed5acca02", "label": "Sajjad Abdollahramezani", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ce47e8b2fa90321ea27ba", "label": "Grzegorz Nowakowski", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616ed31c48b6a07ed5acca03", "label": "Tyler Brown", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616578e53fcba441cd8d3d87", "label": "Charles Gottlieb", "shape": "dot", "title": "0"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "616dc0e5f0242c09a427906a", "label": "Jamal Bentahar", "shape": "dot", "title": "0"}]);
+                  edges = new vis.DataSet([{"from": "616ee2e2230b68e4d0b516ef", "to": "616ee2ef230b68e4d0b516f0"}, {"from": "616ee2ef230b68e4d0b516f0", "to": "616c8f6646c4225dba57323b"}, {"from": "614fe80c96fccec11411b5ac", "to": "614fe80596fccec11411b5ab"}, {"from": "614fe80c96fccec11411b5ac", "to": "614fe7ff96fccec11411b5aa"}, {"from": "614fe80c96fccec11411b5ac", "to": "614fe7ec96fccec11411b5a9"}, {"from": "614fe80c96fccec11411b5ac", "to": "616c8f6646c4225dba57323b"}, {"from": "616ed35848b6a07ed5acca05", "to": "616ed2c848b6a07ed5acc9fe"}, {"from": "616ed35848b6a07ed5acca05", "to": "616ed32248b6a07ed5acca04"}, {"from": "616ed35848b6a07ed5acca05", "to": "616ed2ec48b6a07ed5acca00"}, {"from": "616ed35848b6a07ed5acca05", "to": "616ed2f248b6a07ed5acca01"}, {"from": "616ed35848b6a07ed5acca05", "to": "616ed2db48b6a07ed5acc9ff"}, {"from": "616ed35848b6a07ed5acca05", "to": "616ed31048b6a07ed5acca02"}, {"from": "616ed35848b6a07ed5acca05", "to": "616ed31c48b6a07ed5acca03"}, {"from": "616ed35848b6a07ed5acca05", "to": "616c8f6646c4225dba57323b"}, {"from": "616ce4978b2fa90321ea27bc", "to": "616ce49c8b2fa90321ea27bd"}, {"from": "616ce4978b2fa90321ea27bc", "to": "616ce46d8b2fa90321ea27b9"}, {"from": "616ce4978b2fa90321ea27bc", "to": "616ce4928b2fa90321ea27bb"}, {"from": "616ce4978b2fa90321ea27bc", "to": "616ce47e8b2fa90321ea27ba"}, {"from": "616ce4978b2fa90321ea27bc", "to": "616c8f6646c4225dba57323b"}, {"from": "616c8f4b46c4225dba57323a", "to": "616c8f6646c4225dba57323b"}, {"from": "616c8f6646c4225dba57323b", "to": "616c8f8046c4225dba57323c"}, {"from": "616c8f6646c4225dba57323b", "to": "616decda8943984ab3008d61"}, {"from": "616c8f6646c4225dba57323b", "to": "616dc0f4f0242c09a427906c"}, {"from": "616c8f6646c4225dba57323b", "to": "616dff0defce095c7b2f6972"}, {"from": "616c8f6646c4225dba57323b", "to": "616ed17348b6a07ed5acc9e5"}, {"from": "616c8f6646c4225dba57323b", "to": "616578f03fcba441cd8d3d89"}, {"from": "616c8f6646c4225dba57323b", "to": "616d0903bc0da65919e10916"}, {"from": "616decda8943984ab3008d61", "to": "616dece68943984ab3008d62"}, {"from": "616decda8943984ab3008d61", "to": "616decbc8943984ab3008d5f"}, {"from": "616decda8943984ab3008d61", "to": "616decc88943984ab3008d60"}, {"from": "616d090bbc0da65919e10917", "to": "616d0903bc0da65919e10916"}, {"from": "616dff20efce095c7b2f6973", "to": "616dff0defce095c7b2f6972"}, {"from": "616dc0f4f0242c09a427906c", "to": "616dc116f0242c09a427906d"}, {"from": "616dc0f4f0242c09a427906c", "to": "616dc0ebf0242c09a427906b"}, {"from": "616dc0f4f0242c09a427906c", "to": "616dc0e5f0242c09a427906a"}, {"from": "616ed17348b6a07ed5acc9e5", "to": "616ed18f48b6a07ed5acc9e6"}, {"from": "616ed17348b6a07ed5acc9e5", "to": "616ed15748b6a07ed5acc9e4"}, {"from": "616578f03fcba441cd8d3d89", "to": "616578ea3fcba441cd8d3d88"}, {"from": "616578f03fcba441cd8d3d89", "to": "616578e53fcba441cd8d3d87"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.8,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
